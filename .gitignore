@@ -3,7 +3,7 @@
 
 ### personal ###
 local_settings.py
-0*.py
+*_create_*.py
 
 ### Django ###
 *.log

@@ -1,6 +1,6 @@
 import os
 
-import local_settings
+import config
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -10,10 +10,14 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = local_settings.SECRET_KEY 
+
+SECRET_KEY = config.SECRET_KEY 
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
+
 DEBUG = True
+
 
 ALLOWED_HOSTS = ['*']
 
@@ -62,7 +66,7 @@ WSGI_APPLICATION = 'login.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-DATABASES = local_settings.DATABASE 
+DATABASES = config.DATABASE 
 
 
 # Password validation
@@ -103,7 +107,13 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+#REMOVE_APPEND_SLASH_WARNING
+
+APPEND_SLASH = False
+
+
 ##CORS
+
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True
 
