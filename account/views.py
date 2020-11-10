@@ -35,21 +35,35 @@ class SignUpView(View):
         return JsonResponse({'users': user_data}, status = 200)
 
     def post(self, request):
+
         payload  = json.loads(request.body)
+        print("====================================================================")
+        print("PAYLOAD : ", payload)
+        print("====================================================================")
         email    = payload.get('email', None)
+        print("EMAIL : ", email)
+        print("====================================================================")
         password = payload.get('password', None)
+        print("PASSWORD : ", password)
+        print("====================================================================")
 
         if email and password:
             try:
                 validate_email(payload['email'])
 
                 if Account.objects.filter(email_account = payload['email']).exists():
-                    return JsonResponse({'message': 'DUPLICATED_EMAIL'}, status = 400)
+                    message = "DUPLICATED_EMAIL"
+                    print("MESSAGE : ", message)
+                    print("====================================================================")
+                    return JsonResponse({'message': message}, status = 400)
 
                 password = bcrypt.hashpw(
                     payload['password'].encode(),
                     bcrypt.gensalt()
                 ).decode()
+
+                phone_number = '010-9999-9999'
+                name = '이소헌'
 
                 Account(
                     email_account = payload['email'],
@@ -87,13 +101,19 @@ class SignInView(View):
                             'exp'     : exp
                         }, SECRET_KEY, algorithm = ALGORITHM).decode()
 
-                    return JsonResponse({'Authorization': token}, status = 200)
+                    return JsonResponse({'message': 'SUCCESS', 'Authorization': token}, status = 200)
 
                 return JsonResponse({'message': 'UNAUTHORIZED'}, status = 401)
 
             return JsonResponse({'message': 'UNAUTHORIZED'}, status = 401)
 
-        return JsonResponse({'message': 'KEY_ERROR'}, status = 400)
+        missing_key = (
+            '\'email\'' * (not email) +
+            ' and ' * ((not email) * (not password))+
+            '\'password\'' * (not password)
+        )
+
+        return JsonResponse({'message': 'KEY_ERROR: ' + missing_key}, status = 400)
 
 class KakaoLoginView(View):
     def post(self, request):

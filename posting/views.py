@@ -24,6 +24,7 @@ from .models import (
     Posting,
     Comment
 )
+from account.models import Account
 
 class PostingView(View):
     def get(self, request):
@@ -63,6 +64,7 @@ class CommentsView(View):
         comments = Comment.objects.all().select_related('account').prefetch_related('likecomment_set')
         comment_list = [
             {
+                'id'            : comment.id,
                 'content'       : comment.content,
                 'is_liked'      : comment.likecomment_set.filter(account_id = 1).exists(),
                 'account'       : comment.account.email_account,
@@ -75,7 +77,8 @@ class CommentsView(View):
         payload  = json.loads(request.body)
         content  = payload.get('content', None)
         account_id = payload.get('account_id', None)
-        posting_id = payload.get('posting_id', None)
+
+        posting_id = 1
 
         if content: 
 

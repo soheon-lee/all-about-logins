@@ -6,6 +6,6 @@ from .views import (
 )
 
 urlpatterns = [
-    path('/comment', CommentsView.as_view()),
+    path('', CommentsView.as_view()),
     path('/comment/<int:comment_id>', CommentView.as_view()),
 ]
