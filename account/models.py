@@ -13,8 +13,8 @@ class Account(models.Model):
     class Meta:
         db_table = 'accounts'
 
-    def __str__(self):
-        return self.email_account
+#    def __str__(self):
+#        return self.email_account
 
 class SocialMedia(models.Model):
     name = models.CharField(max_length = 50)
@@ -30,10 +30,11 @@ class Dog(models.Model):
     name = models.CharField(max_length = 200)
     jong = models.CharField(max_length = 200)
     age  = models.IntegerField()
+    owner = models.ForeignKey(Account, on_delete = models.CASCADE, null = True)
 
     class Meta:
         db_table = 'dogs'
 
     def __str__(self):
-        return self.name
+        return self.name + ' ' + str(self.age)
 

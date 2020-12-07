@@ -28,14 +28,14 @@ from account.models import Account
 
 class PostingView(View):
     def get(self, request):
-        Posting.objects.all()
-        posting_list= [
-            {
-                'content'       : posting.content,
-                'account'       : posting.account.name,
+        post = Posting.objects.get(id=1)
+
+        posting_data = {
+                'content' : post.content,
+                'account' : post.account.name
             }
-        ]
-        return JsonResponse({'comments': comment_list}, status = 200)
+
+        return JsonResponse({'post': posting_data}, status = 200)
 
     def post(self, request):
         payload  = json.loads(request.body)
@@ -44,7 +44,7 @@ class PostingView(View):
 
         account_id = 1
 
-        if content: 
+        if content:
             Comment(
                 content = content,
                 account_id = account_id,

@@ -9,7 +9,7 @@ from .views import (
 )
 
 urlpatterns = [
-    path('', SignUpView.as_view()),
+    path('/', SignUpView.as_view()),
     path('/login', SignInView.as_view()),
     path('/kakao', KakaoLoginView.as_view()),
     path('/google', GoogleLoginView.as_view()),

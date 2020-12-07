@@ -1,5 +1,6 @@
 import jwt
 import json
+import pprint
 import bcrypt
 import requests
 
@@ -28,14 +29,32 @@ from .models import (
 
 class SignUpView(View):
     def get(self, request):
+        print(request.method)
         users = Account.objects.all()
-        user_data = [{
-            'email': user.email_account
-        } for user in users]
-        return JsonResponse({'users': user_data}, status = 200)
+
+        user_list = []
+
+        for user in users:
+            user_data = {
+                'user_name' : user.name,
+                'email': user.email_account,
+                'password' : user.password
+            }
+
+            user_list.append(user_data)
+
+        return JsonResponse({'users': user_list}, status = 200)
+
+
+#        user_data = [{
+#
+#            'email': user.email_account
+#
+#        } for user in users]
 
     def post(self, request):
 
+        print(request.body)
         payload  = json.loads(request.body)
         print("====================================================================")
         print("PAYLOAD : ", payload)
@@ -175,7 +194,9 @@ class DogView(View):
 
     def get(self, request):
 
-        doggy = Dog.objects.values()
+        doggy = Dog.objects\
+                .filter(age__gte = 1)\
+                .order_by(id)
 
         return JsonResponse({'my_dogs' : list(doggy)}, status = 200)
 
