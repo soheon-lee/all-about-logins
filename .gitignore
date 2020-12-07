@@ -1,5 +1,10 @@
 # Created by https://www.toptal.com/developers/gitignore/api/vim,django,python,macos,linux,git
 # Edit at https://www.toptal.com/developers/gitignore?templates=vim,django,python,macos,linux,git
+#
+
+### vscode ###
+.vscode/
+
 
 ### personal ###
 local_settings.py
