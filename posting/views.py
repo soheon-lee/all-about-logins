@@ -80,7 +80,7 @@ class CommentsView(View):
 
         posting_id = 1
 
-        if content: 
+        if content:
 
             Comment(
                 content = content,
@@ -100,4 +100,3 @@ class CommentView(View):
     def delete(self, request, comment_id):
         Comment.objects.get(id = comment_id).delete()
         return JsonResponse({'message': 'DELETED'}, status = 200)
-        

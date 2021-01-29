@@ -1,7 +1,7 @@
 from django.db import models
 
 class Account(models.Model):
-    email_account  = models.URLField(unique = True)
+    email          = models.URLField(unique = True)
     password       = models.CharField(max_length = 200, null = True)
     name           = models.CharField(max_length = 50, null = True)
     profile_image  = models.URLField(max_length = 2000, null = True)
@@ -13,8 +13,8 @@ class Account(models.Model):
     class Meta:
         db_table = 'accounts'
 
-#    def __str__(self):
-#        return self.email_account
+    def __str__(self):
+        return self.email
 
 class SocialMedia(models.Model):
     name = models.CharField(max_length = 50)
@@ -25,16 +25,3 @@ class SocialMedia(models.Model):
 
     def __str__(self):
         return self.name
-
-class Dog(models.Model):
-    name = models.CharField(max_length = 200)
-    jong = models.CharField(max_length = 200)
-    age  = models.IntegerField()
-    owner = models.ForeignKey(Account, on_delete = models.CASCADE, null = True)
-
-    class Meta:
-        db_table = 'dogs'
-
-    def __str__(self):
-        return self.name + ' ' + str(self.age)
-

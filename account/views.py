@@ -23,13 +23,11 @@ from config  import (
 )
 from .models import (
     Account,
-    SocialMedia,
-    Dog
+    SocialMedia
 )
 
 class SignUpView(View):
     def get(self, request):
-        print(request.method)
         users = Account.objects.all()
 
         user_list = []
@@ -37,24 +35,16 @@ class SignUpView(View):
         for user in users:
             user_data = {
                 'user_name' : user.name,
-                'email': user.email_account,
-                'password' : user.password
+                'email'     : user.email,
+                'password'  : user.password
             }
 
             user_list.append(user_data)
 
         return JsonResponse({'users': user_list}, status = 200)
 
-
-#        user_data = [{
-#
-#            'email': user.email_account
-#
-#        } for user in users]
-
     def post(self, request):
 
-        print(request.body)
         payload  = json.loads(request.body)
         print("====================================================================")
         print("PAYLOAD : ", payload)
@@ -70,10 +60,8 @@ class SignUpView(View):
             try:
                 validate_email(payload['email'])
 
-                if Account.objects.filter(email_account = payload['email']).exists():
+                if Account.objects.filter(email = payload['email']).exists():
                     message = "DUPLICATED_EMAIL"
-                    print("MESSAGE : ", message)
-                    print("====================================================================")
                     return JsonResponse({'message': message}, status = 400)
 
                 password = bcrypt.hashpw(
@@ -81,12 +69,9 @@ class SignUpView(View):
                     bcrypt.gensalt()
                 ).decode()
 
-                phone_number = '010-9999-9999'
-                name = '이소헌'
-
                 Account(
-                    email_account = payload['email'],
-                    password      = password
+                    email    = payload['email'],
+                    password = password
                 ).save()
 
                 return JsonResponse({'message': 'SUCCESS'}, status = 200)
@@ -109,8 +94,8 @@ class SignInView(View):
         password = payload.get('password', None)
 
         if email and password:
-            if Account.objects.filter(email_account = email).exists():
-                user = Account.objects.get(email_account = email)
+            if Account.objects.filter(email = email).exists():
+                user = Account.objects.get(email = email)
 
                 if bcrypt.checkpw(password.encode(), user.password.encode()):
                     exp   = datetime.utcnow() + timedelta(hours = 1)
@@ -188,42 +173,3 @@ class GoogleLoginView(View):
         access_token = jwt.encode({'user_id' : user.id}, SECRET_KEY, ALGORITHM).decode('utf-8')
 
         return JsonResponse({'access_token' : access_token}, status = 200)
-
-
-class DogView(View):
-
-    def get(self, request):
-
-        doggy = Dog.objects\
-                .filter(age__gte = 1)\
-                .order_by(id)
-
-        return JsonResponse({'my_dogs' : list(doggy)}, status = 200)
-
-    def delete(self, request):
-
-        data = json.loads(request.body)
-        puppy_name = data['name']
-
-        Dog.objects.get(name = puppy_name).delete()
-
-        return JsonResponse({'message': 'DOG_DELTED!'}, status = 200)
-
-    def post(self, request):
-
-        data = json.loads(request.body)
-
-        puppy_name = data['name']
-        puppy_jong = data['jong']
-        puppy_age = data['dog_age']
-
-        Dog.objects.create(
-            name = puppy_name,
-            jong = puppy_jong,
-            age = puppy_age
-        )
-
-
-        return JsonResponse({'message': 'DOG_SAVED!'}, status = 201)
-
-

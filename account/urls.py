@@ -4,14 +4,12 @@ from .views import (
     SignUpView,
     SignInView,
     KakaoLoginView,
-    GoogleLoginView,
-    DogView,
+    GoogleLoginView
 )
 
 urlpatterns = [
-    path('/', SignUpView.as_view()),
-    path('/login', SignInView.as_view()),
+    path('/signup', SignUpView.as_view()),
+    path('/signin', SignInView.as_view()),
     path('/kakao', KakaoLoginView.as_view()),
     path('/google', GoogleLoginView.as_view()),
-    path('/dogs', DogView.as_view()),
 ]
